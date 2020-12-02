@@ -5,15 +5,25 @@ export interface PasswordEntry {
 
 export interface PasswordPolicy {
     letter: string;
-    min: number;
-    max: number;
+    a: number;
+    b: number;
 }
 
-export function testPasswordPolicy({ password, policy: { letter, min, max } }: PasswordEntry) {
+export function testPasswordPolicy({ password, policy: { letter, a, b } }: PasswordEntry) {
     const count = password.split('').filter((c) => c === letter).length;
-    return count >= min && count <= max;
+    return count >= a && count <= b;
 }
 
-export function countValidPasswords(entries: PasswordEntry[]) {
-    return entries.filter(testPasswordPolicy).length;
+export function testOfficialPasswordPolicy({ password, policy: { letter, a, b } }: PasswordEntry) {
+    const matchA = password[a - 1] === letter;
+    const matchB = password[b - 1] === letter;
+
+    return matchA !== matchB;
+}
+
+export function countValidPasswords(
+    entries: PasswordEntry[],
+    test: (entry: PasswordEntry) => boolean,
+) {
+    return entries.filter(test).length;
 }
