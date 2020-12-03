@@ -47,13 +47,16 @@ describe('countValidPasswords', () => {
         expect(countValidPasswords(exampleInput, testPasswordPolicy)).toBe(2);
     });
     test('should count valid puzzle passwords correctly', () => {
-        expect(countValidPasswords(loadFile('day02.input', parseInput), testPasswordPolicy)).toBe(
-            582,
-        );
+        expect(
+            countValidPasswords(loadFile('day02.input').map(parseInput), testPasswordPolicy),
+        ).toBe(582);
     });
     test('should count valid official puzzle passwords correctly', () => {
         expect(
-            countValidPasswords(loadFile('day02.input', parseInput), testOfficialPasswordPolicy),
+            countValidPasswords(
+                loadFile('day02.input').map(parseInput),
+                testOfficialPasswordPolicy,
+            ),
         ).toBe(729);
     });
 });

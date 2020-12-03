@@ -17,7 +17,7 @@ describe('findAnswer', () => {
         expect(
             findAnswer(
                 2020,
-                loadFile('day01.input', (s) => parseInt(s, 10)),
+                loadFile('day01.input').map((s) => parseInt(s, 10)),
             ),
         ).toBe(788739);
     });
@@ -37,7 +37,7 @@ describe('findAnswer2', () => {
         expect(
             findAnswer2(
                 2020,
-                loadFile('day01.input', (s) => parseInt(s, 10)),
+                loadFile('day01.input').map((s) => parseInt(s, 10)),
             ),
         ).toBe(178724430);
     });
