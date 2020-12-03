@@ -1,26 +1,11 @@
 import {
     countValidPasswords,
-    PasswordEntry,
+    parseInput,
+    part1,
+    part2,
     testOfficialPasswordPolicy,
     testPasswordPolicy,
 } from './day02';
-import { loadFile } from './lib';
-
-const regex = /^([0-9]+)\-([0-9]+)\s+(.)\: (.*)$/;
-
-function parseInput(line: string): PasswordEntry {
-    const x = regex.exec(line);
-    if (!x || x.length !== 5) throw new Error('Invalid input' + line);
-    const [_, a, b, letter, password] = x;
-    return {
-        policy: {
-            letter,
-            a: parseInt(a),
-            b: parseInt(b),
-        },
-        password,
-    };
-}
 
 const exampleInput = ['1-3 a: abcde', '1-3 b: cdefg', '2-9 c: ccccccccc'].map(parseInput);
 
@@ -47,16 +32,9 @@ describe('countValidPasswords', () => {
         expect(countValidPasswords(exampleInput, testPasswordPolicy)).toBe(2);
     });
     test('should count valid puzzle passwords correctly', () => {
-        expect(
-            countValidPasswords(loadFile('day02.input').map(parseInput), testPasswordPolicy),
-        ).toBe(582);
+        expect(part1()).toBe(582);
     });
     test('should count valid official puzzle passwords correctly', () => {
-        expect(
-            countValidPasswords(
-                loadFile('day02.input').map(parseInput),
-                testOfficialPasswordPolicy,
-            ),
-        ).toBe(729);
+        expect(part2()).toBe(729);
     });
 });

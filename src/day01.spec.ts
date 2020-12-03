@@ -1,5 +1,4 @@
-import { findAnswer, findAnswer2, findSummands, findSummands2 } from './day01';
-import { loadFile } from './lib';
+import { findAnswer, findAnswer2, findSummands, findSummands2, part1, part2 } from './day01';
 
 const exampleInput = [1721, 979, 366, 299, 675, 1456];
 
@@ -14,12 +13,7 @@ describe('findAnswer', () => {
         expect(findAnswer(2020, exampleInput)).toBe(514579);
     });
     test('should find the puzzzle answer', () => {
-        expect(
-            findAnswer(
-                2020,
-                loadFile('day01.input').map((s) => parseInt(s, 10)),
-            ),
-        ).toBe(788739);
+        expect(part1()).toBe(788739);
     });
 });
 
@@ -34,11 +28,6 @@ describe('findAnswer2', () => {
         expect(findAnswer2(2020, exampleInput)).toBe(241861950);
     });
     test('should find the puzzle answer', () => {
-        expect(
-            findAnswer2(
-                2020,
-                loadFile('day01.input').map((s) => parseInt(s, 10)),
-            ),
-        ).toBe(178724430);
+        expect(part2()).toBe(178724430);
     });
 });

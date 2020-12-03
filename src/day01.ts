@@ -1,4 +1,6 @@
-import { multiplyArray } from "./lib";
+import { loadFile, multiplyArray } from './lib';
+
+const puzzleInput = loadFile('day01.input').map((s) => parseInt(s, 10));
 
 export function findSummands(sum: number, possibleSummands: number[]) {
     for (const a of possibleSummands) {
@@ -26,3 +28,6 @@ export function findSummands2(sum: number, possibleSummands: number[]) {
 export function findAnswer2(sum: number, possibleSummands: number[]) {
     return multiplyArray(findSummands2(sum, possibleSummands));
 }
+
+export const part1 = () => findAnswer(2020, puzzleInput);
+export const part2 = () => findAnswer2(2020, puzzleInput);
