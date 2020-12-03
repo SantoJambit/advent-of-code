@@ -1,3 +1,5 @@
+import { multiplyArray } from "./lib";
+
 export function findSummands(sum: number, possibleSummands: number[]) {
     for (const a of possibleSummands) {
         const b = possibleSummands.find((s) => a + s === sum);
@@ -7,8 +9,7 @@ export function findSummands(sum: number, possibleSummands: number[]) {
 }
 
 export function findAnswer(sum: number, possibleSummands: number[]) {
-    const [a, b] = findSummands(sum, possibleSummands);
-    return a * b;
+    return multiplyArray(findSummands(sum, possibleSummands));
 }
 
 export function findSummands2(sum: number, possibleSummands: number[]) {
@@ -23,6 +24,5 @@ export function findSummands2(sum: number, possibleSummands: number[]) {
 }
 
 export function findAnswer2(sum: number, possibleSummands: number[]) {
-    const [a, b, c] = findSummands2(sum, possibleSummands);
-    return a * b * c;
+    return multiplyArray(findSummands2(sum, possibleSummands));
 }
