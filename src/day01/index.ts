@@ -1,6 +1,6 @@
-import { loadFile, multiplyArray } from './lib';
+import { loadFile, multiplyArray } from '../lib';
 
-const puzzleInput = loadFile('day01.input').map((s) => parseInt(s, 10));
+const puzzleInput = loadFile('day01/input.txt').map((s) => parseInt(s, 10));
 
 export function findSummands(sum: number, possibleSummands: number[]) {
     for (const a of possibleSummands) {

@@ -1,6 +1,7 @@
-import { findAnswer, findAnswer2, findSummands, findSummands2, part1, part2 } from './day01';
+import { findAnswer, findAnswer2, findSummands, findSummands2, part1, part2 } from '.';
+import { loadFile } from '../lib';
 
-const exampleInput = [1721, 979, 366, 299, 675, 1456];
+const exampleInput = loadFile("day01/example.txt").map((s) => parseInt(s));
 
 describe('findSummands', () => {
     test('should find the example summands', () => {

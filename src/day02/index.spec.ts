@@ -5,9 +5,10 @@ import {
     part2,
     testOfficialPasswordPolicy,
     testPasswordPolicy,
-} from './day02';
+} from '.';
+import { loadFile } from '../lib';
 
-const exampleInput = ['1-3 a: abcde', '1-3 b: cdefg', '2-9 c: ccccccccc'].map(parseInput);
+const exampleInput = loadFile('day02/example.txt').map(parseInput);
 
 describe('testPasswordPolicy', () => {
     test('should test example password policies correctly', () => {

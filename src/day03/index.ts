@@ -1,6 +1,6 @@
-import { loadFile, multiplyArray } from './lib';
+import { loadFile, multiplyArray } from '../lib';
 
-export const puzzleInput = loadFile('day03.input');
+export const puzzleInput = loadFile('day03/input.txt');
 
 export const slopes = [
     [1, 1],

@@ -8,12 +8,12 @@ import {
     validationRules,
     countValidPassportsStrict,
     part2,
-} from './day04';
-import { loadFileGroupedByBlankLine } from './lib';
+} from '.';
+import { loadFileGroupedByBlankLine } from '../lib';
 
-const exampleInput = loadFileGroupedByBlankLine('day04.example');
-const exampleInvalidPassports = loadFileGroupedByBlankLine('day04.invalidPassports');
-const exampleValidPassports = loadFileGroupedByBlankLine('day04.validPassports');
+const exampleInput = loadFileGroupedByBlankLine('day04/example.txt');
+const exampleInvalidPassports = loadFileGroupedByBlankLine('day04/invalidPassports.txt');
+const exampleValidPassports = loadFileGroupedByBlankLine('day04/validPassports.txt');
 
 const expectedExamplePassports: Partial<Passport>[] = [
     {

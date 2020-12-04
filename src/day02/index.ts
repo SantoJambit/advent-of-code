@@ -1,4 +1,4 @@
-import { loadFile } from './lib';
+import { loadFile } from '../lib';
 
 export interface PasswordEntry {
     password: string;
@@ -46,7 +46,7 @@ export function countValidPasswords(
     return entries.filter(test).length;
 }
 
-const puzzleInput = loadFile('day02.input').map(parseInput);
+const puzzleInput = loadFile('day02/input.txt').map(parseInput);
 
 export const part1 = () => countValidPasswords(puzzleInput, testPasswordPolicy);
 

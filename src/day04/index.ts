@@ -1,4 +1,4 @@
-import { loadFileGroupedByBlankLine } from './lib';
+import { loadFileGroupedByBlankLine } from '../lib';
 
 export interface Passport {
     byr: string;
@@ -67,7 +67,7 @@ export function countValidPassportsStrict(passports: Partial<Passport>[]) {
     return passports.map(isPassportValidStrict).filter((valid) => valid).length;
 }
 
-const puzzleInput = batchToPassports(loadFileGroupedByBlankLine('day04.input'));
+const puzzleInput = batchToPassports(loadFileGroupedByBlankLine('day04/input.txt'));
 
 export const part1 = () => countValidPassports(puzzleInput);
 

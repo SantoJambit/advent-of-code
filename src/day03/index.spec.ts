@@ -1,19 +1,7 @@
-import { countTreesForSlope, slopes, puzzleInput, part2, part1 } from './day03';
-import { multiplyArray } from './lib';
+import { countTreesForSlope, slopes, puzzleInput, part2, part1 } from '.';
+import { multiplyArray, loadFile } from '../lib';
 
-const exampleInput = [
-    '..##.......',
-    '#...#...#..',
-    '.#....#..#.',
-    '..#.#...#.#',
-    '.#...##..#.',
-    '..#.##.....',
-    '.#.#.#....#',
-    '.#........#',
-    '#.##...#...',
-    '#...##....#',
-    '.#..#...#.#',
-];
+export const exampleInput = loadFile('day03/example.txt');
 
 describe('countTreesForSlope', () => {
     test('should count trees for example input correctly', () => {
