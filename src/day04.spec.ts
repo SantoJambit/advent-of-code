@@ -1,7 +1,19 @@
-import { batchToPassports, countValidPassports, isPassportValid, Passport, part1 } from './day04';
+import {
+    batchToPassports,
+    countValidPassports,
+    isPassportValid,
+    Passport,
+    part1,
+    isPassportValidStrict,
+    validationRules,
+    countValidPassportsStrict,
+    part2,
+} from './day04';
 import { loadFileGroupedByBlankLine } from './lib';
 
 const exampleInput = loadFileGroupedByBlankLine('day04.example');
+const exampleInvalidPassports = loadFileGroupedByBlankLine('day04.invalidPassports');
+const exampleValidPassports = loadFileGroupedByBlankLine('day04.validPassports');
 
 const expectedExamplePassports: Partial<Passport>[] = [
     {
@@ -54,11 +66,68 @@ describe('isPassportValid', () => {
     });
 });
 
+describe('validationRules', () => {
+    test('should validate byr correctly', () => {
+        expect(validationRules.byr('2002')).toBe(true);
+        expect(validationRules.byr('2003')).toBe(false);
+    });
+    test('should validate hgt correctly', () => {
+        expect(validationRules.hgt('60in')).toBe(true);
+        expect(validationRules.hgt('190cm')).toBe(true);
+        expect(validationRules.hgt('190in')).toBe(false);
+        expect(validationRules.hgt('190')).toBe(false);
+    });
+    test('should validate hcl correctly', () => {
+        expect(validationRules.hcl('#123abc')).toBe(true);
+        expect(validationRules.hcl('#123abz')).toBe(false);
+        expect(validationRules.hcl('123abc')).toBe(false);
+    });
+    test('should validate ecl correctly', () => {
+        expect(validationRules.ecl('brn')).toBe(true);
+        expect(validationRules.ecl('wat')).toBe(false);
+    });
+    test('should validate pid correctly', () => {
+        expect(validationRules.pid('000000001')).toBe(true);
+        expect(validationRules.pid('0123456789')).toBe(false);
+    });
+});
+
+describe('isPassportValidStrict', () => {
+    test('should return true for strictly valid passports', () => {
+        expect(
+            batchToPassports(exampleValidPassports)
+                .map(isPassportValidStrict)
+                .every((valid) => valid),
+        ).toBe(true);
+    });
+    test('should return false for not strictly valid passports', () => {
+        expect(
+            batchToPassports(exampleInvalidPassports)
+                .map(isPassportValidStrict)
+                .every((valid) => !valid),
+        ).toBe(true);
+    });
+});
+
 describe('countValidPassports', () => {
     test('should count the valid passports of the example', () => {
         expect(countValidPassports(expectedExamplePassports)).toBe(2);
     });
     test('should count the valid passports of the puzzle', () => {
         expect(part1()).toBe(196);
+    });
+});
+
+describe('countValidPassportsStrict', () => {
+    test('should count the strictly valid passports of the example', () => {
+        expect(
+            countValidPassportsStrict([
+                ...batchToPassports(exampleInvalidPassports),
+                ...batchToPassports(exampleValidPassports),
+            ]),
+        ).toBe(4);
+    });
+    test('should count the stricly valid passports of the puzzle', () => {
+        expect(part2()).toBe(114);
     });
 });

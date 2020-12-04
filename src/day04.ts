@@ -29,10 +29,46 @@ export function isPassportValid(passport: Passport) {
     return requiredKeys.every((key) => keys.includes(key));
 }
 
+const withinRange = (value: number, lo: number, hi: number) => value >= lo && value <= hi;
+const heightRegex = /^([0-9]+)(cm|in)$/;
+const hairColorRegex = /^#[0-9a-f]{6}$/;
+const eyeColorRegex = /^(amb|blu|brn|gry|grn|hzl|oth)$/;
+const pidRegex = /^[0-9]{9}$/;
+
+export const validationRules = {
+    byr: (s: string) => withinRange(parseInt(s), 1920, 2002),
+    iyr: (s: string) => withinRange(parseInt(s), 2010, 2020),
+    eyr: (s: string) => withinRange(parseInt(s), 2020, 2030),
+    hgt: (s: string) => {
+        const match = heightRegex.exec(s);
+        if (!match) return false;
+        const height = parseInt(match[1]);
+        const unit = match[2];
+        return unit === 'cm' ? withinRange(height, 150, 193) : withinRange(height, 59, 76);
+    },
+    hcl: (s: string) => hairColorRegex.test(s),
+    ecl: (s: string) => eyeColorRegex.test(s),
+    pid: (s: string) => pidRegex.test(s),
+    cid: () => true,
+};
+
+export function isPassportValidStrict(passport: Passport) {
+    if (!isPassportValid(passport)) return false;
+    return Object.keys(passport)
+        .map((key) => validationRules[key](passport[key]))
+        .every((valid) => valid);
+}
+
 export function countValidPassports(passports: Partial<Passport>[]) {
     return passports.map(isPassportValid).filter((valid) => valid).length;
+}
+
+export function countValidPassportsStrict(passports: Partial<Passport>[]) {
+    return passports.map(isPassportValidStrict).filter((valid) => valid).length;
 }
 
 const puzzleInput = batchToPassports(loadFileGroupedByBlankLine('day04.input'));
 
 export const part1 = () => countValidPassports(puzzleInput);
+
+export const part2 = () => countValidPassportsStrict(puzzleInput);
