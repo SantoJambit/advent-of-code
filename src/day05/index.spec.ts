@@ -1,4 +1,4 @@
-import { getColumn, getRow, getSeatId, part1 } from '.';
+import { getColumn, getRow, getSeatId, part1, part2 } from '.';
 
 describe('getRow', () => {
     test('should get the example row', () => {
@@ -21,5 +21,11 @@ describe('getSeatId', () => {
 describe('part1', () => {
     test('should return the highest seat id on the puzzle input', () => {
         expect(part1()).toEqual(813);
+    });
+});
+
+describe('part2', () => {
+    test('should your seat from the puzzle input', () => {
+        expect(part2()).toEqual(612);
     });
 });

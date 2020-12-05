@@ -31,3 +31,19 @@ const puzzleInput = loadFile('day05/input.txt');
 
 export const part1 = () =>
     Math.max(...puzzleInput.map((seat) => getSeatId(getRow(seat), getColumn(seat))));
+
+export const part2 = () => {
+    const seatIds = puzzleInput
+        .map((seat) => getSeatId(getRow(seat), getColumn(seat)))
+        .sort((a, b) => a - b);
+
+    let startFrom = 1;
+    for (let id = seatIds[0] + 1; id < seatIds[seatIds.length - 1] - 1; id++) {
+        const index = seatIds.indexOf(id, startFrom);
+
+        if (index < 0 && seatIds.includes(id - 1) && seatIds.includes(id + 1)) return id;
+
+        startFrom = index;
+    }
+    return null;
+};
