@@ -2,8 +2,8 @@ import { addArray, loadFileGroupedByBlankLine } from '../lib';
 
 export function getUniqueQuestionsForGroup(group: string[]) {
     return group
-        .map((line) => line.split(''))
-        .flat()
+        .join('')
+        .split('')
         .filter((ch, index, array) => array.indexOf(ch) === index);
 }
 
