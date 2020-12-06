@@ -28,3 +28,7 @@ export function loadFileGroupedByBlankLine(path: string) {
 export function multiplyArray(values: number[]) {
     return values.slice(1).reduce((a, b) => a * b, values[0]);
 }
+
+export function addArray(values: number[]) {
+    return values.slice(1).reduce((a, b) => a + b, values[0]);
+}
