@@ -1,14 +1,11 @@
 import { addArray, loadFileGroupedByBlankLine } from '../lib';
 
-export function getUniqueQuestionsForGroup(group: string[]) {
-    return group
-        .join('')
-        .split('')
-        .filter((ch, index, array) => array.indexOf(ch) === index);
-}
-
 export function getGroupYesCounts(group: string[]) {
-    return getUniqueQuestionsForGroup(group).length;
+    const set = new Set<string>();
+    for (const line of group) {
+        for (const ch of line) set.add(ch);
+    }
+    return set.size;
 }
 
 export function sumYesCountsOfGroups(groups: string[][]) {
@@ -16,8 +13,11 @@ export function sumYesCountsOfGroups(groups: string[][]) {
 }
 
 export function getGroupYesCountsFixed(group: string[]) {
-    const questions = getUniqueQuestionsForGroup(group);
-    return questions.filter((ch) => group.every((line) => line.includes(ch))).length;
+    const set = new Set<string>(group[0]);
+    for (const ch of set) {
+        if (!group.every((line) => line.includes(ch))) set.delete(ch);
+    }
+    return set.size;
 }
 
 export function sumYesCountsOfGroupsFixed(groups: string[][]) {
