@@ -41,23 +41,17 @@ export function getPossibleDirectContainerColors(rules: Rule[], color: string) {
         .map((rule) => rule.color);
 }
 
-export function countPossibleContainerColors(rules: Rule[], color: string) {
+export function getPossibleContainerColors(rules: Rule[], color: string, out: Set<string>) {
     const colors = getPossibleDirectContainerColors(rules, color);
-    let colorsToCheck = colors;
-    do {
-        let nextColors = [];
-        for (const color2 of colorsToCheck) {
-            const additionalColors = getPossibleDirectContainerColors(rules, color2);
-            for (const color3 of additionalColors) {
-                if (!colors.includes(color3)) {
-                    colors.push(color3);
-                    nextColors.push(color3);
-                }
-            }
-        }
-        if (nextColors.length === 0) return colors.length;
-        colorsToCheck = nextColors;
-    } while (true);
+    for (const c of colors) {
+        out.add(c);
+        getPossibleContainerColors(rules, c, out);
+    }
+    return out;
+}
+
+export function countPossibleContainerColors(rules: Rule[], color: string) {
+    return getPossibleContainerColors(rules, color, new Set()).size;
 }
 
 export function countRequiredIndividualBags(rules: Rule[], color: string) {
