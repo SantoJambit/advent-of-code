@@ -1,6 +1,6 @@
 import { performance } from 'perf_hooks';
 
-const daysFinished = 6;
+const daysFinished = 7;
 const fractionDigits = 3;
 const warmupFrames = Array.from({ length: 20 });
 const iterationFrames = Array.from({ length: 100 });

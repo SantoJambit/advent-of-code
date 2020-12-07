@@ -1,7 +1,16 @@
-import { countPossibleContainerColors, parseRule, part1, Rule } from '.';
+import {
+    countPossibleContainerColors,
+    countRequiredIndividualBags,
+    parseRule,
+    part1,
+    part2,
+    Rule,
+} from '.';
 import { loadFile } from '../lib';
 
 const exampleInput = loadFile('day07/example.txt');
+const exampleInput2 = loadFile('day07/example2.txt');
+
 const exampleRules: Rule[] = [
     {
         color: 'light red',
@@ -71,8 +80,23 @@ describe('countPossibleContainerColors', () => {
     });
 });
 
+describe('countRequiredIndividualBags', () => {
+    test('should find out how many individual bags are required inside of a shiny gold bag with the example rules', () => {
+        expect(countRequiredIndividualBags(exampleRules, 'shiny gold')).toBe(32);
+    });
+    test('should find out how many individual bags are required inside of a shiny gold bag with the example2 rules', () => {
+        expect(countRequiredIndividualBags(exampleInput2.map(parseRule), 'shiny gold')).toBe(126);
+    });
+});
+
 describe('part1', () => {
     test('should find out how many bag colors are required to carry at least one shiny gold bag in another bag with the puzzle rules', () => {
         expect(part1()).toBe(128);
+    });
+});
+
+describe('part2', () => {
+    test('should find out how many individual bags are required inside of a shiny gold bag with the puzzle rules', () => {
+        expect(part2()).toBe(20189);
     });
 });

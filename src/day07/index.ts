@@ -1,4 +1,4 @@
-import { loadFile } from '../lib';
+import { addArray, loadFile } from '../lib';
 
 const ruleRegex = /^(.*) bags contain (.*).$/;
 const bagRegex = /^([0-9]+) (.*) bags?$/;
@@ -60,6 +60,20 @@ export function countPossibleContainerColors(rules: Rule[], color: string) {
     } while (true);
 }
 
+export function countRequiredIndividualBags(rules: Rule[], color: string) {
+    const rule = rules.find((rule) => rule.color === color);
+    if (!rule) throw new Error(`Rule not found for color "${color}"`);
+
+    return addArray(
+        rule.bags.map(
+            (bagRule) =>
+                bagRule.count + bagRule.count * countRequiredIndividualBags(rules, bagRule.color),
+        ),
+    );
+}
+
 const puzzleInput = loadFile('day07/input.txt').map(parseRule);
 
 export const part1 = () => countPossibleContainerColors(puzzleInput, 'shiny gold');
+
+export const part2 = () => countRequiredIndividualBags(puzzleInput, 'shiny gold');

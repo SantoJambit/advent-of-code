@@ -30,5 +30,5 @@ export function multiplyArray(values: number[]) {
 }
 
 export function addArray(values: number[]) {
-    return values.slice(1).reduce((a, b) => a + b, values[0]);
+    return values.reduce((a, b) => a + b, 0);
 }
