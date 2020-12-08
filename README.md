@@ -15,3 +15,4 @@ Performance measurements:
 |   5 | 0.076 ms | 0.205 ms |
 |   6 | 0.601 ms | 0.627 ms |
 |   7 | 2.525 ms | 0.320 ms |
+|   8 | 0.030 ms | 0.012 ms |

@@ -2,8 +2,10 @@ import {
     applyInstruction,
     applyInstructionsUntilLoop,
     BootState,
+    runInstructionsWithFix,
     parseInstruction,
     part1,
+    part2,
 } from '.';
 import { loadFile } from '../lib';
 
@@ -77,8 +79,8 @@ describe('applyInstruction', () => {
 });
 
 describe('applyInstructionsUntilLoop', () => {
-    test('find the final state before loop', () => {
-        applyInstructionsUntilLoop(state, exampleInput);
+    test('should find the final state before loop', () => {
+        expect(applyInstructionsUntilLoop(state, exampleInput)).toBe(true);
         expect(state).toEqual({
             accumulator: 5,
             line: 1,
@@ -86,8 +88,20 @@ describe('applyInstructionsUntilLoop', () => {
     });
 });
 
+describe('runInstructionsWithFix', () => {
+    test('should return the instructions, trying to patch it and return the final state', () => {
+        expect(runInstructionsWithFix(exampleInput)).toBe(8);
+    });
+});
+
 describe('part1', () => {
     test('should find the result', () => {
         expect(part1()).toBe(2058);
+    });
+});
+
+describe('part2', () => {
+    test('should find the bogous line to fix the infinite loop', () => {
+        expect(part2()).toBe(1000);
     });
 });

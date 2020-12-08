@@ -42,12 +42,31 @@ export function applyInstruction(state: BootState, instruction: Instruction) {
 
 export function applyInstructionsUntilLoop(state: BootState, instructions: Instruction[]) {
     const lines = [state.line];
+    const lastLine = instructions.length - 1;
     do {
         const instruction = instructions[state.line];
         applyInstruction(state, instruction);
-        if (lines.includes(state.line)) break;
+        if (lines.includes(state.line)) return true;
         lines.push(state.line);
-    } while (true);
+    } while (state.line <= lastLine);
+
+    return false;
+}
+
+export function runInstructionsWithFix(instructions: Instruction[]) {
+    const state = { accumulator: 0, line: 0 };
+    for (let line = 0; line < instructions.length; line++) {
+        const instruction = instructions[line];
+        if (instruction.operation === 'acc') continue;
+
+        const prevOperation = instruction.operation;
+        instruction.operation = prevOperation === 'jmp' ? 'nop' : 'jmp';
+        if (applyInstructionsUntilLoop(state, instructions) === false) return state.accumulator;
+        instruction.operation = prevOperation;
+        state.accumulator = 0;
+        state.line = 0;
+    }
+    return null;
 }
 
 const puzzleInput = loadFile('day08/input.txt').map(parseInstruction);
@@ -57,3 +76,5 @@ export const part1 = () => {
     applyInstructionsUntilLoop(state, puzzleInput);
     return state.accumulator;
 };
+
+export const part2 = () => runInstructionsWithFix(puzzleInput);
