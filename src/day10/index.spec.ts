@@ -1,4 +1,4 @@
-import { countJoltDifferences, part1 } from '.';
+import { countJoltArrangements, countJoltDifferences, part1, part2 } from '.';
 import { loadFile } from '../lib';
 
 const exampleInput = loadFile('day10/example.txt').map((s) => parseInt(s));
@@ -13,8 +13,23 @@ describe('countJoltDifferences', () => {
     });
 });
 
+describe('countJoltArrangements', () => {
+    test('should count the jolt arrangements in the first example', () => {
+        expect(countJoltArrangements(exampleInput)).toBe(8);
+    });
+    test('should count the jolt arrangements in the second example', () => {
+        expect(countJoltArrangements(exampleInput2)).toBe(19208);
+    });
+});
+
 describe('part1', () => {
     test('should return the result of the puzzle', () => {
         expect(part1()).toBe(1755);
+    });
+});
+
+describe('part2', () => {
+    test('should return the possible jolt arrangements of the puzzle', () => {
+        expect(part2()).toBe(4049565169664);
     });
 });
