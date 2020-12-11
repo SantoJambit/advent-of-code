@@ -2,18 +2,38 @@ import { performance } from 'perf_hooks';
 
 const daysFinished = 11;
 const fractionDigits = 3;
-const warmupFrames = Array.from({ length: 20 });
-const iterationFrames = Array.from({ length: 100 });
+const warmupConfig = {
+    minFrames: 2,
+    maxFrames: 20,
+    maxTime: 100,
+};
+const iterationConfig = {
+    minFrames: 3,
+    maxFrames: 100,
+    maxTime: 500,
+};
+
+type IterationConfig = typeof iterationConfig;
+
+function measureTimes(fn: () => void, { minFrames, maxFrames, maxTime }: IterationConfig) {
+    const totalStart = performance.now();
+    let frames = 0;
+    const times: number[] = [];
+    do {
+        const start = performance.now();
+        fn();
+        times.push(performance.now() - start);
+        frames++;
+    } while (
+        frames < minFrames ||
+        (frames < maxFrames && performance.now() - totalStart < maxTime)
+    );
+    return times;
+}
 
 function measureMedian(fn: () => void) {
-    warmupFrames.forEach(fn);
-    const times = iterationFrames
-        .map(() => {
-            const start = performance.now();
-            fn();
-            return performance.now() - start;
-        })
-        .sort();
+    measureTimes(fn, warmupConfig);
+    const times = measureTimes(fn, iterationConfig).sort();
     const medianTime = times[Math.round(times.length / 2)];
     return `${medianTime.toFixed(fractionDigits)} ms`;
 }
