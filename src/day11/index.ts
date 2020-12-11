@@ -1,20 +1,32 @@
 import { addArray, loadFile } from '../lib';
 
-function isSeatOccupied(input: string[], y: number, x: number) {
-    return y >= 0 && y < input.length && x >= 0 && x < input[0].length && input[y][x] === '#';
-}
-
 function countNeighbours(input: string[], x: number, y: number) {
-    return (
-        (isSeatOccupied(input, y - 1, x - 1) ? 1 : 0) +
-        (isSeatOccupied(input, y - 1, x) ? 1 : 0) +
-        (isSeatOccupied(input, y - 1, x + 1) ? 1 : 0) +
-        (isSeatOccupied(input, y, x - 1) ? 1 : 0) +
-        (isSeatOccupied(input, y, x + 1) ? 1 : 0) +
-        (isSeatOccupied(input, y + 1, x - 1) ? 1 : 0) +
-        (isSeatOccupied(input, y + 1, x) ? 1 : 0) +
-        (isSeatOccupied(input, y + 1, x + 1) ? 1 : 0)
-    );
+    const left = x - 1;
+    const right = x + 1;
+    let count = 0;
+    const hasLeft = left >= 0;
+    const hasRight = right < input[0].length;
+
+    const midLine = input[y];
+    if (hasLeft && midLine[left] === '#') count++;
+    if (hasRight && midLine[right] === '#') count++;
+
+    const top = y - 1;
+    if (top >= 0) {
+        const topLine = input[top];
+        if (topLine[x] === '#') count++;
+        if (hasLeft && topLine[left] === '#') count++;
+        if (hasRight && topLine[right] === '#') count++;
+    }
+
+    const bottom = y + 1;
+    if (bottom < input.length) {
+        const bottomLine = input[bottom];
+        if (bottomLine[x] === '#') count++;
+        if (hasLeft && bottomLine[left] === '#') count++;
+        if (hasRight && bottomLine[right] === '#') count++;
+    }
+    return count;
 }
 
 export function expectedRules(input: string[], x: number, y: number, currentValue: string) {
