@@ -1,15 +1,19 @@
 import { addArray, loadFile } from '../lib';
 
+function isSeatOccupied(input: string[], x: number, y: number) {
+    return input[y]?.[x] === '#';
+}
+
 function countNeighbours(input: string[], x: number, y: number) {
     return (
-        (input[y - 1]?.[x - 1] === '#' ? 1 : 0) +
-        (input[y - 1]?.[x] === '#' ? 1 : 0) +
-        (input[y - 1]?.[x + 1] === '#' ? 1 : 0) +
-        (input[y]?.[x - 1] === '#' ? 1 : 0) +
-        (input[y]?.[x + 1] === '#' ? 1 : 0) +
-        (input[y + 1]?.[x - 1] === '#' ? 1 : 0) +
-        (input[y + 1]?.[x] === '#' ? 1 : 0) +
-        (input[y + 1]?.[x + 1] === '#' ? 1 : 0)
+        (isSeatOccupied(input, y - 1, x - 1) ? 1 : 0) +
+        (isSeatOccupied(input, y - 1, x) ? 1 : 0) +
+        (isSeatOccupied(input, y - 1, x + 1) ? 1 : 0) +
+        (isSeatOccupied(input, y, x - 1) ? 1 : 0) +
+        (isSeatOccupied(input, y, x + 1) ? 1 : 0) +
+        (isSeatOccupied(input, y + 1, x - 1) ? 1 : 0) +
+        (isSeatOccupied(input, y + 1, x) ? 1 : 0) +
+        (isSeatOccupied(input, y + 1, x + 1) ? 1 : 0)
     );
 }
 
