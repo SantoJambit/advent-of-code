@@ -13,27 +13,72 @@ function countNeighbours(input: string[], x: number, y: number) {
     );
 }
 
-export function applyRules(input: string[]) {
+export function expectedRules(input: string[], x: number, y: number, currentValue: string) {
+    switch (currentValue) {
+        case '#':
+            return countNeighbours(input, x, y) >= 4 ? 'L' : '#';
+        case 'L':
+            return countNeighbours(input, x, y) === 0 ? '#' : 'L';
+    }
+    return currentValue;
+}
+
+function canSeeOccupiedSeatInLine(input: string[], sx: number, sy: number, dx: number, dy: number) {
+    let x = sx + dx;
+    let y = sy + dy;
+
+    while (x >= 0 && x < input[0].length && y >= 0 && y < input.length) {
+        const c = input[y][x];
+        if (c !== '.') return c === '#';
+        x += dx;
+        y += dy;
+    }
+
+    return false;
+}
+
+export function countVisibleOccupiedSeats(input: string[], x: number, y: number) {
+    return (
+        (canSeeOccupiedSeatInLine(input, x, y, -1, -1) ? 1 : 0) +
+        (canSeeOccupiedSeatInLine(input, x, y, 0, -1) ? 1 : 0) +
+        (canSeeOccupiedSeatInLine(input, x, y, 1, -1) ? 1 : 0) +
+        (canSeeOccupiedSeatInLine(input, x, y, -1, 0) ? 1 : 0) +
+        (canSeeOccupiedSeatInLine(input, x, y, 1, 0) ? 1 : 0) +
+        (canSeeOccupiedSeatInLine(input, x, y, -1, 1) ? 1 : 0) +
+        (canSeeOccupiedSeatInLine(input, x, y, 0, 1) ? 1 : 0) +
+        (canSeeOccupiedSeatInLine(input, x, y, 1, 1) ? 1 : 0)
+    );
+}
+
+export function actualRules(input: string[], x: number, y: number, currentValue: string) {
+    switch (currentValue) {
+        case '#':
+            return countVisibleOccupiedSeats(input, x, y) >= 5 ? 'L' : '#';
+        case 'L':
+            return countVisibleOccupiedSeats(input, x, y) === 0 ? '#' : 'L';
+    }
+    return currentValue;
+}
+
+export function applyRules(
+    input: string[],
+    ruleHandler: (input: string[], x: number, y: number, currentValue: string) => string,
+) {
     return input.map((line, y) => {
         return line
             .split('')
-            .map((c, x) => {
-                switch (c) {
-                    case '#':
-                        return countNeighbours(input, x, y) >= 4 ? 'L' : '#';
-                    case 'L':
-                        return countNeighbours(input, x, y) === 0 ? '#' : 'L';
-                }
-                return c;
-            })
+            .map((c, x) => ruleHandler(input, x, y, c))
             .join('');
     });
 }
 
-export function applyRulesUntilNoChange(input: string[]) {
+export function applyRulesUntilNoChange(
+    input: string[],
+    ruleHandler: (input: string[], x: number, y: number, currentValue: string) => string,
+) {
     let prev = input;
     do {
-        const next = applyRules(prev);
+        const next = applyRules(prev, ruleHandler);
         if (prev.every((line, index) => line === next[index])) break;
         prev = next;
     } while (true);
@@ -46,4 +91,6 @@ export function countOccupiedSeats(input: string[]) {
 
 const puzzleInput = loadFile('day11/input.txt');
 
-export const part1 = () => countOccupiedSeats(applyRulesUntilNoChange(puzzleInput));
+export const part1 = () => countOccupiedSeats(applyRulesUntilNoChange(puzzleInput, expectedRules));
+
+export const part2 = () => countOccupiedSeats(applyRulesUntilNoChange(puzzleInput, actualRules));
