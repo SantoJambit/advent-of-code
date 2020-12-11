@@ -1,6 +1,6 @@
 import { addArray, loadFile } from '../lib';
 
-function isSeatOccupied(input: string[], x: number, y: number) {
+function isSeatOccupied(input: string[], y: number, x: number) {
     return y >= 0 && y < input.length && x >= 0 && x < input[0].length && input[y][x] === '#';
 }
 
