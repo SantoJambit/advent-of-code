@@ -1,7 +1,7 @@
 import { addArray, loadFile } from '../lib';
 
 function isSeatOccupied(input: string[], x: number, y: number) {
-    return input[y]?.[x] === '#';
+    return y >= 0 && y < input.length && x >= 0 && x < input[0].length && input[y][x] === '#';
 }
 
 function countNeighbours(input: string[], x: number, y: number) {
