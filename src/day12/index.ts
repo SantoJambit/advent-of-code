@@ -16,9 +16,12 @@ export function parseInstruction(line: string): Instruction {
     };
 }
 
-export interface ShipState {
+export interface Point {
     east: number;
     north: number;
+}
+
+export interface ShipState extends Point {
     angle: number;
 }
 
@@ -56,7 +59,53 @@ export function applyInstructions(state: ShipState, instructions: Instruction[])
     }
 }
 
-export function getManhattanDistance(state: ShipState) {
+export function rotatePoint(point: Point, angle: number) {
+    const rad = -angle * (Math.PI / 180);
+    const cos = Math.cos(rad);
+    const sin = Math.sin(rad);
+    const { east, north } = point;
+    point.east = Math.round(east * cos - north * sin);
+    point.north = Math.round(east * sin + north * cos);
+}
+
+export interface ShipState2 extends Point {
+    waypoint: Point;
+}
+
+export function applyInstruction2(state: ShipState2, { action, value }: Instruction) {
+    switch (action) {
+        case 'N':
+            state.waypoint.north += value;
+            break;
+        case 'S':
+            state.waypoint.north -= value;
+            break;
+        case 'E':
+            state.waypoint.east += value;
+            break;
+        case 'W':
+            state.waypoint.east -= value;
+            break;
+        case 'L':
+            rotatePoint(state.waypoint, -value);
+            break;
+        case 'R':
+            rotatePoint(state.waypoint, value);
+            break;
+        case 'F':
+            state.east += state.waypoint.east * value;
+            state.north += state.waypoint.north * value;
+            break;
+    }
+}
+
+export function applyInstructions2(state: ShipState2, instructions: Instruction[]) {
+    for (const instruction of instructions) {
+        applyInstruction2(state, instruction);
+    }
+}
+
+export function getManhattanDistance(state: Point) {
     return Math.abs(state.east) + Math.abs(state.north);
 }
 
@@ -69,5 +118,18 @@ export const part1 = () => {
         angle: 0,
     };
     applyInstructions(state, puzzleInput);
+    return getManhattanDistance(state);
+};
+
+export const part2 = () => {
+    const state: ShipState2 = {
+        east: 0,
+        north: 0,
+        waypoint: {
+            east: 10,
+            north: 1,
+        },
+    };
+    applyInstructions2(state, puzzleInput);
     return getManhattanDistance(state);
 };
