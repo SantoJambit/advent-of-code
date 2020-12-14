@@ -1,4 +1,4 @@
-import { addArray, loadFile, multiplyArray } from '../lib';
+import { loadFile } from '../lib';
 
 interface Schedule {
     earliestTimestamp: number;
