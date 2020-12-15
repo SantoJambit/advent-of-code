@@ -1,5 +1,5 @@
 export function play(first: number[], turns: number) {
-    const past = new Array(turns);
+    const past = new Array<number>(turns);
     for (let turn = 1; turn <= first.length; turn++) {
         past[first[turn - 1]] = turn;
     }
