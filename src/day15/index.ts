@@ -1,25 +1,24 @@
 export function play(first: number[], turns: number) {
-    const lastTurns: { [s: string]: number } = {};
-    const secondLastTurns: { [s: string]: number } = {};
+    const past = new Array(turns);
     for (let turn = 1; turn <= first.length; turn++) {
-        lastTurns[first[turn - 1]] = turn;
+        past[first[turn - 1]] = turn;
     }
 
-    let last = first[first.length - 1];
+    let spoken = first[first.length - 1];
+    let next = 0;
     for (let turn = first.length + 1; turn <= turns; turn++) {
-        let speak = 0;
-        let secondLastTurn = secondLastTurns[last];
-        if (secondLastTurn) {
-            const lastTurn = turn - 1;
-            speak = lastTurn - secondLastTurn;
-        }
-        secondLastTurns[speak] = lastTurns[speak];
-        lastTurns[speak] = turn;
-        last = speak;
+        let speak = next ? turn - 1 - next : 0;
+        const lastTurn = past[speak];
+        past[speak] = turn;
+
+        next = lastTurn ? lastTurn : 0;
+        spoken = speak;
     }
-    return last;
+    return spoken;
 }
 
 const puzzleInput = [11, 18, 0, 20, 1, 7, 16];
 
 export const part1 = () => play(puzzleInput, 2020);
+
+export const part2 = () => play(puzzleInput, 30000000);
