@@ -7,12 +7,11 @@ export function play(first: number[], turns: number) {
     let spoken = first[first.length - 1];
     let next = 0;
     for (let turn = first.length + 1; turn <= turns; turn++) {
-        let speak = next ? turn - 1 - next : 0;
-        const lastTurn = past[speak];
-        past[speak] = turn;
+        spoken = next ? turn - 1 - next : 0;
+        const lastTurn = past[spoken];
+        past[spoken] = turn;
 
         next = lastTurn ? lastTurn : 0;
-        spoken = speak;
     }
     return spoken;
 }
