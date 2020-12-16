@@ -1,6 +1,6 @@
 import { performance } from 'perf_hooks';
 
-const daysFinished = 15;
+const daysFinished = 16;
 const fractionDigits = 3;
 const warmupConfig = {
     minFrames: 2,
@@ -42,8 +42,11 @@ const rows: [string, string, string][] = [];
 
 for (let day = 1; day <= daysFinished; day++) {
     const { part1, part2 } = require(`./day${day.toString().padStart(2, '0')}`);
+    console.log(`- ${day}`);
     rows.push([day.toString(), measureMedian(part1), measureMedian(part2)]);
 }
+
+console.log('');
 
 const header = ['Day', 'Part 1', 'Part 2'];
 const lengths = header.map((label, index) =>

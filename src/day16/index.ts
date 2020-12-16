@@ -71,6 +71,59 @@ export function getResult1(input: PuzzleInput) {
     return addArray(getInvalidValues(input));
 }
 
+export function getValidTickets(rules: Rule[], nearbyTickets: TicketValues[]) {
+    const validNearbyTickets: TicketValues[] = [];
+    for (const nearbyTicket of nearbyTickets) {
+        let valid = true;
+        for (const value of nearbyTicket) {
+            if (!rules.some((rule) => matchesRule(value, rule))) {
+                valid = false;
+                break;
+            }
+        }
+        if (valid) validNearbyTickets.push(nearbyTicket);
+    }
+    return validNearbyTickets;
+}
+
+export function getRuleOrder({ rules, ticket, nearbyTickets }: PuzzleInput) {
+    const tickets = [ticket, ...getValidTickets(rules, nearbyTickets)];
+    const matchingRules = ticket.map((_, column) => {
+        const subset = rules.filter((rule) =>
+            tickets.every((ticket) => matchesRule(ticket[column], rule)),
+        );
+        return {
+            column,
+            rules: subset,
+        };
+    });
+    const ruleTypes = ticket.map(() => '');
+    matchingRules.sort((a, b) => a.rules.length - b.rules.length);
+    for (let i = 0; i < matchingRules.length; i++) {
+        const match = matchingRules[i];
+        if (match.rules.length !== 1) throw new Error('Expected exactly one rule');
+        const rule = match.rules[0];
+        for (let j = i + 1; j < matchingRules.length; j++) {
+            const match2 = matchingRules[j];
+            const index = match2.rules.indexOf(rule);
+            if (index >= 0) match2.rules.splice(index, 1);
+        }
+        ruleTypes[match.column] = rule.type;
+    }
+    return ruleTypes;
+}
+
 const puzzleInput = parseInput(loadFileGroupedByBlankLine('day16/input.txt'));
 
 export const part1 = () => getResult1(puzzleInput);
+
+export const part2 = () => {
+    const ruleTypes = getRuleOrder(puzzleInput);
+    let result = 1;
+    for (let column = 0; column < ruleTypes.length; column++) {
+        if (ruleTypes[column].startsWith('departure')) {
+            result *= puzzleInput.ticket[column];
+        }
+    }
+    return result;
+};
