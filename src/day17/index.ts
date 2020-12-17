@@ -36,18 +36,15 @@ export function runCycle(cubes: Set<string>) {
         const neighbors = getCubeNeighbors(cube);
         let activeNeighbors = 0;
         for (const n of neighbors) {
-            if (cubes.has(n)) {
-                activeNeighbors++;
-            } else {
-                if (n in touchedNeighbors) touchedNeighbors[n]++;
-                else touchedNeighbors[n] = 1;
-            }
+            if (cubes.has(n)) activeNeighbors++;
+            else touchedNeighbors[n] = (touchedNeighbors[n] ?? 0) + 1;
         }
-        // If a cube is active and exactly 2 or 3 of its neighbors are also active, the cube remains active. Otherwise, the cube becomes inactive.
+        // If a cube is active and exactly 2 or 3 of its neighbors are also active, the cube remains active.
         if (activeNeighbors === 2 || activeNeighbors === 3)
             cubesAfter.add(cube);
     }
-    // If a cube is inactive but exactly 3 of its neighbors are active, the cube becomes active. Otherwise, the cube remains inactive.
+
+    // If a cube is inactive but exactly 3 of its neighbors are active, the cube becomes active.
     for (const cube in touchedNeighbors) {
         if (touchedNeighbors[cube] === 3) cubesAfter.add(cube);
     }
