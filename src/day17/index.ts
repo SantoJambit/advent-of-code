@@ -1,59 +1,34 @@
 import { loadFile } from '../lib';
 
-export function loadLayer(lines: string[]) {
+export function loadLayer(lines: string[], suffixCoords: string) {
     const cubes = new Set<string>();
     for (let y = 0; y < lines.length; y++) {
         const line = lines[y];
         for (let x = 0; x < line.length; x++) {
-            if (line[x] === '#') cubes.add(`${x},${y},0`);
+            if (line[x] === '#') cubes.add(`${x},${y},${suffixCoords}`);
         }
     }
     return cubes;
 }
 
-function getCubeNeighbors(x: number, y: number, z: number): string[] {
-    const l = x - 1; // left
-    const r = x + 1; // right
-    const u = y - 1; // under
-    const a = y + 1; // above
-    const b = z - 1; // back
-    const f = z + 1; // front
-    return [
-        `${l},${u},${b}`,
-        `${l},${u},${z}`,
-        `${l},${u},${f}`,
-        `${l},${y},${b}`,
-        `${l},${y},${z}`,
-        `${l},${y},${f}`,
-        `${l},${a},${b}`,
-        `${l},${a},${z}`,
-        `${l},${a},${f}`,
-        `${x},${u},${b}`,
-        `${x},${u},${z}`,
-        `${x},${u},${f}`,
-        `${x},${y},${b}`,
-        `${x},${y},${f}`,
-        `${x},${a},${b}`,
-        `${x},${a},${z}`,
-        `${x},${a},${f}`,
-        `${r},${u},${b}`,
-        `${r},${u},${z}`,
-        `${r},${u},${f}`,
-        `${r},${y},${b}`,
-        `${r},${y},${z}`,
-        `${r},${y},${f}`,
-        `${r},${a},${b}`,
-        `${r},${a},${z}`,
-        `${r},${a},${f}`,
-    ];
+export function getCubeNeighbors3(cube: string): string[] {
+    const [x, y, z] = cube.split(',').map((s) => parseInt(s));
+    const neighbors: string[] = [];
+    for (let dx = x - 1; dx < x + 2; dx++) {
+        for (let dy = y - 1; dy < y + 2; dy++) {
+            for (let dz = z - 1; dz < z + 2; dz++) {
+                neighbors.push(`${dx},${dy},${dz}`);
+            }
+        }
+    }
+    return neighbors.filter((n) => n !== cube);
 }
 
-export function runCycle(cubes: Set<string>) {
+export function runCycle(cubes: Set<string>, getCubeNeighbors: (cube: string) => string[]) {
     const cubesAfter = new Set<string>();
     const touchedNeighbors: { [s: string]: number } = {};
     for (const cube of cubes) {
-        const c = cube.split(',').map((s) => parseInt(s));
-        const neighbors = getCubeNeighbors(c[0], c[1], c[2]);
+        const neighbors = getCubeNeighbors(cube);
         let activeNeighbors = 0;
         for (const n of neighbors) {
             if (cubes.has(n)) {
@@ -73,10 +48,32 @@ export function runCycle(cubes: Set<string>) {
     return cubesAfter;
 }
 
-const puzzleInput = loadLayer(loadFile('day17/input.txt'));
+export function getCubeNeighbors4(cube: string): string[] {
+    const [x, y, z, w] = cube.split(',').map((s) => parseInt(s));
+    const neighbors: string[] = [];
+    for (let dx = x - 1; dx < x + 2; dx++) {
+        for (let dy = y - 1; dy < y + 2; dy++) {
+            for (let dz = z - 1; dz < z + 2; dz++) {
+                for (let dw = w - 1; dw < w + 2; dw++) {
+                    neighbors.push(`${dx},${dy},${dz},${dw}`);
+                }
+            }
+        }
+    }
+    return neighbors.filter((n) => n !== cube);
+}
+
+const puzzleInput3 = loadLayer(loadFile('day17/input.txt'), '0');
+const puzzleInput4 = loadLayer(loadFile('day17/input.txt'), '0,0');
 
 export const part1 = () => {
-    let next = puzzleInput;
-    for (let i = 0; i < 6; i++) next = runCycle(next);
+    let next = puzzleInput3;
+    for (let i = 0; i < 6; i++) next = runCycle(next, getCubeNeighbors3);
+    return next.size;
+};
+
+export const part2 = () => {
+    let next = puzzleInput4;
+    for (let i = 0; i < 6; i++) next = runCycle(next, getCubeNeighbors4);
     return next.size;
 };
