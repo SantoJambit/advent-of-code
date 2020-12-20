@@ -1,15 +1,25 @@
-import { getCornerIds, getCornerIdsMultiplied, parseTile, part1 } from '.';
-import { loadFileGroupedByBlankLine } from '../lib';
+import {
+    combineImage,
+    getCorners,
+    getCornerIdsMultiplied,
+    parseTile,
+    part1,
+    flipImageVertical,
+    getWaterRoughness,
+    part2,
+} from '.';
+import { loadFile, loadFileGroupedByBlankLine } from '../lib';
 
 const exampleInput = loadFileGroupedByBlankLine('day20/example.txt').map(
     parseTile
 );
+const exampleOutput = flipImageVertical(loadFile('day20/exampleImage.txt'));
 
-describe('getCornerIds', () => {
-    test('should get the corner ids for the example input', () => {
+describe('getCorners', () => {
+    test('should get the corners for the example input', () => {
         expect(
-            getCornerIds(exampleInput.map((tile) => tile.clone()))
-                .map((id) => parseInt(id))
+            getCorners(exampleInput.map((tile) => tile.clone()))
+                .map((tile) => parseInt(tile.id))
                 .sort((a, b) => a - b)
         ).toEqual([1171, 1951, 2971, 3079]);
     });
@@ -23,8 +33,28 @@ describe('getCornerIdsMultiplied', () => {
     });
 });
 
+describe('combineImage', () => {
+    test('should combine the image correctly', () => {
+        expect(combineImage(exampleInput.map((tile) => tile.clone()))).toEqual(
+            exampleOutput
+        );
+    });
+});
+
+describe('getWaterRoughness', () => {
+    test('should get the water roughness of the example input', () => {
+        expect(getWaterRoughness(exampleOutput)).toBe(273);
+    });
+});
+
 describe('part1', () => {
     test('should get the corner ids of the puzzle input multiplied with eachother', () => {
         expect(part1()).toBe(17032646100079);
+    });
+});
+
+describe('part2', () => {
+    test('should get the water roughness of the puzzle input', () => {
+        expect(part2()).toBe(2006);
     });
 });
