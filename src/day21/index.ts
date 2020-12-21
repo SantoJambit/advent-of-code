@@ -21,12 +21,7 @@ export function parseFood(line: string): Food {
     };
 }
 
-function sortByIngredientCount(a: PossibleIngredients, b: PossibleIngredients) {
-    return b.ingredients.length - a.ingredients.length;
-}
-
-export function getNonAllergenicIngredients(foods: Food[]) {
-    const ingredients: string[] = [];
+function getFoodsByAllergen(foods: Food[]) {
     const foodsByAllergen: { [s: string]: Food[] } = {};
     for (const food of foods) {
         for (const allergen of food.allergens) {
@@ -34,11 +29,26 @@ export function getNonAllergenicIngredients(foods: Food[]) {
             if (list) list.push(food);
             else foodsByAllergen[allergen] = [food];
         }
+    }
+    return foodsByAllergen;
+}
+
+function getUniqueIngredients(foods: Food[]) {
+    const ingredients = new Set<string>();
+    for (const food of foods) {
         for (const ingredient of food.ingredients) {
-            if (!ingredients.includes(ingredient)) ingredients.push(ingredient);
+            ingredients.add(ingredient);
         }
     }
+    return ingredients;
+}
 
+function sortByIngredientCount(a: PossibleIngredients, b: PossibleIngredients) {
+    return b.ingredients.length - a.ingredients.length;
+}
+
+export function getIngredientToAllergenMap(foods: Food[]) {
+    const foodsByAllergen = getFoodsByAllergen(foods);
     const possibleIngredients: PossibleIngredients[] = [];
     for (const allergen in foodsByAllergen) {
         const foods = foodsByAllergen[allergen];
@@ -69,14 +79,30 @@ export function getNonAllergenicIngredients(foods: Food[]) {
             e.ingredients = e.ingredients.filter((i) => i !== ingredient);
         }
     }
-    const ingredientsWithAllergens = Object.keys(ingredientToAllergen);
-    return ingredients.filter((i) => !ingredientsWithAllergens.includes(i));
+    return ingredientToAllergen;
 }
 
-export function countIngredientsInFoods(foods: Food[], ingredients: string[]) {
+export function getCanonicalDangerousIngredientList(foods: Food[]) {
+    const map = getIngredientToAllergenMap(foods);
+    return Object.keys(map)
+        .sort((a, b) => (map[a] < map[b] ? -1 : 1))
+        .join(',');
+}
+
+export function getNonAllergenicIngredients(foods: Food[]) {
+    const result = getUniqueIngredients(foods);
+    for (const ingredient in getIngredientToAllergenMap(foods)) {
+        result.delete(ingredient);
+    }
+    return result;
+}
+
+export function countIngredientsInFoods(foods: Food[], ingredients: Set<string>) {
     let count = 0;
     for (const food of foods) {
-        count += food.ingredients.filter((i) => ingredients.includes(i)).length;
+        for (const ing of food.ingredients) {
+            if (ingredients.has(ing)) count++;
+        }
     }
     return count;
 }
@@ -88,3 +114,5 @@ export const part1 = () =>
         puzzleInput,
         getNonAllergenicIngredients(puzzleInput)
     );
+
+export const part2 = () => getCanonicalDangerousIngredientList(puzzleInput);
