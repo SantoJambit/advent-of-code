@@ -53,19 +53,13 @@ export function playRecursiveCombat(
     let winner: PlayerState;
     while (cards1.length && cards2.length) {
         const s1 = cards1.join();
+        if (cards1History.includes(s1)) return player1;
+
         const s2 = cards2.join();
-        if (!cards1History.includes(s1)) {
-            cards1History.push(s1);
-        } else {
-            winner = player1;
-            break;
-        }
-        if (!cards2History.includes(s2)) {
-            cards2History.push(s2);
-        } else {
-            winner = player1;
-            break;
-        }
+        if (cards2History.includes(s2)) return player1;
+
+        cards1History.push(s1);
+        cards2History.push(s2);
         const card1 = cards1.shift();
         const card2 = cards2.shift();
         if (cards1.length >= card1 && cards2.length >= card2) {
@@ -87,7 +81,7 @@ export function playRecursiveCombat(
 export function getFinalScore2(player1: PlayerState, player2: PlayerState) {
     const winner = playRecursiveCombat(
         clonePlayerState(player1),
-        clonePlayerState(player2),
+        clonePlayerState(player2)
     ).cards;
 
     return winner.reduce((r, v, i) => r + v * (winner.length - i), 0);
