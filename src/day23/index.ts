@@ -48,7 +48,7 @@ function createNodes(firstValues: number[], fillUp: number) {
 
 type CupsInfo = ReturnType<typeof createNodes>;
 
-function moveCups2({ first, byValue }: CupsInfo, moves: number) {
+function moveCups({ first, byValue }: CupsInfo, moves: number) {
     let currentCup = first;
     const minCup = 1;
     const maxCup = byValue.length - 1;
@@ -81,7 +81,7 @@ function moveCups2({ first, byValue }: CupsInfo, moves: number) {
 export function solution1(input: number[], moves: number) {
     const nodes = createNodes(input.slice(), input.length - 1);
     const one = nodes.byValue[1];
-    moveCups2(nodes, moves);
+    moveCups(nodes, moves);
     const values = [];
     let next = one.next;
     do {
@@ -94,7 +94,7 @@ export function solution1(input: number[], moves: number) {
 export function solution2(input: number[]) {
     const nodes = createNodes(input.slice(), 1000000);
     const one = nodes.byValue[1];
-    moveCups2(nodes, 10000000);
+    moveCups(nodes, 10000000);
     return one.next.value * one.next.next.value;
 }
 
