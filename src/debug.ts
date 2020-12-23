@@ -1,7 +1,4 @@
-import { combineImage, parseTile } from './day20';
-import { loadFileGroupedByBlankLine } from './lib';
+import { createNodes, moveCups2 } from './day23';
 
-const exampleInput = loadFileGroupedByBlankLine('day20/example.txt').map(
-    parseTile
-);
-combineImage(exampleInput.map((tile) => tile.clone()));
+const exampleInput = [1, 6, 7, 2, 4, 8, 3, 5, 9];
+console.log(moveCups2(createNodes(exampleInput, 1000000), 10000000));

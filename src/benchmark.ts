@@ -1,6 +1,6 @@
 import { performance } from 'perf_hooks';
 
-const daysFinished = 22;
+const daysFinished = 23;
 const fractionDigits = 3;
 const warmupConfig = {
     minFrames: 2,
