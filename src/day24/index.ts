@@ -1,7 +1,14 @@
 import { loadFile } from '../lib';
 
 const instructionRegex = /(e|w|se|sw|ne|nw)/;
-const directionNames = ['e', 'w', 'se', 'sw', 'ne', 'nw'];
+const hexDirections = [
+    { dx: 1, dy: 0 },
+    { dx: -1, dy: 0 },
+    { dx: 0.5, dy: -1 },
+    { dx: -0.5, dy: -1 },
+    { dx: 0.5, dy: 1 },
+    { dx: -0.5, dy: 1 },
+];
 
 interface Direction {
     dx: number;
@@ -55,10 +62,7 @@ export function solution1(instructions: Direction[][]) {
 
 export function getNeighbors(key: string) {
     const [x, y] = key.split('/').map(parseFloat);
-    return directionNames.map((s) => {
-        const { dx, dy } = getDirection(s);
-        return `${x + dx}/${y + dy}`;
-    });
+    return hexDirections.map(({ dx, dy }) => `${x + dx}/${y + dy}`);
 }
 
 function runDay(blackTiles: Set<string>) {
