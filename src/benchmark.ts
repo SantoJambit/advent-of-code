@@ -1,6 +1,6 @@
 import { performance } from 'perf_hooks';
 
-const daysFinished = 24;
+const daysFinished = 25;
 const fractionDigits = 3;
 const warmupConfig = {
     minFrames: 2,
@@ -15,7 +15,10 @@ const iterationConfig = {
 
 type IterationConfig = typeof iterationConfig;
 
-function measureTimes(fn: () => void, { minFrames, maxFrames, maxTime }: IterationConfig) {
+function measureTimes(
+    fn: () => void,
+    { minFrames, maxFrames, maxTime }: IterationConfig
+) {
     const totalStart = performance.now();
     let frames = 0;
     const times: number[] = [];
@@ -50,13 +53,15 @@ console.log('');
 
 const header = ['Day', 'Part 1', 'Part 2'];
 const lengths = header.map((label, index) =>
-    Math.max(label.length, ...rows.map((columns) => columns[index].length)),
+    Math.max(label.length, ...rows.map((columns) => columns[index].length))
 );
 
 const pad = (v: string, i: number) => v.padStart(lengths[i], ' ');
 
 console.log(`| ${header.map(pad).join(' | ')} |`);
-console.log(`| ${lengths.map((length) => '-'.repeat(length - 1)).join(': | ')}: |`);
+console.log(
+    `| ${lengths.map((length) => '-'.repeat(length - 1)).join(': | ')}: |`
+);
 
 for (const row of rows) {
     console.log(`| ${row.map(pad).join(' | ')} |`);
